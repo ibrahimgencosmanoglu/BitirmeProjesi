@@ -59,18 +59,18 @@ public class SearchState : IState
         {
             float distance = Vector3.Distance(myTransform.position, player.transform.position);
             agent.SetDestination(EnemyAI.targetPosition);
-            if (SM.fieldOfViewRedCheck())
+            if (SM.fieldOfViewRedCheck(this.redZoneRadius))
             {
                 SM.ChangeState(SM.chaseState);
             }
-            Debug.Log(Vector3.Distance(myTransform.position,EnemyAI.targetPosition));
             if (Vector3.Distance(myTransform.position, EnemyAI.targetPosition) <= 5f) 
             {
                 Debug.Log("Search!");
                 SM.ChangeState(SM.idleState);
             }
-            if ((distance <= yellowZoneRadius) && (yellowZoneRadius >= redZoneRadius))
+            if (yellowZoneRadius >= redZoneRadius)
             {
+                Debug.Log(redZoneRadius);
                 redZoneRadius += redZoneIncSpeed * Time.deltaTime;
             }
         }

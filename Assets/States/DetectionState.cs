@@ -77,7 +77,7 @@ public class DetectionState : IState
         {
             distance = Vector3.Distance(myTransform.position, player.transform.position);
 
-            if ((distance <= yellowZoneRadius) && (yellowZoneRadius >= redZoneRadius))
+            if (SM.fieldOfViewYellowCheck(this.yellowZoneRadius))
             {
                 time += Time.deltaTime;
                 if (time >= detectionTime) 
@@ -87,11 +87,11 @@ public class DetectionState : IState
                 }
             }
 
-            if (SM.fieldOfViewRedCheck())
+            if (SM.fieldOfViewRedCheck(this.redZoneRadius))
             {
                 SM.ChangeState(SM.chaseState);
             }
-            else if (!SM.fieldOfViewYellowCheck())
+            else if (!SM.fieldOfViewYellowCheck(this.yellowZoneRadius))
             {
                 SM.ChangeState(SM.idleState);
             }

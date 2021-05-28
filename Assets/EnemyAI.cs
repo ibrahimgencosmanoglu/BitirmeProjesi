@@ -31,12 +31,14 @@ public class EnemyAI : StateMachine
     [SerializeField] LayerMask obstructionMask;
     [SerializeField] public GameObject playerRef;
     public static Vector3 targetPosition;
+    //public static float redZoneDefault = new float();
     private void Awake()
     {
+        //redZoneDefault = redZoneRadius;
         this.agent = GetComponent < NavMeshAgent>();
         playerRef = GameObject.FindGameObjectWithTag("Player");
         //target = PlayerManager.instance.player.transform;
-        idleState = new IdleState(isIdleState,this,enemyMesh.material,this.transform,this.playerRef,this.yellowZoneRadius,this.idleStartPoint,this.idleEndPoint,this.speed,this.agent);
+        idleState = new IdleState(isIdleState,this,enemyMesh.material,this.transform,this.playerRef,this.yellowZoneRadius,this.idleStartPoint,this.idleEndPoint,this.speed,this.agent,this.redZoneRadius);
         chaseState = new ChaseState(isChaseState,this,enemyMesh.material,this.transform,this.rb,this.agent,this.playerRef,this.yellowZoneRadius);
         detectionState = new DetectionState(isDetectionState, this, enemyMesh.material, this.transform, this.playerRef, this.yellowZoneRadius, this.redZoneRadius, this.redZoneIncSpeed,this.agent,this.detectionTime);
         searchState = new SearchState(isSearchState, this, enemyMesh.material, this.transform, this.rb, this.agent, this.playerRef, this.redZoneRadius, this.yellowZoneRadius, this.redZoneIncSpeed);
@@ -51,8 +53,8 @@ public class EnemyAI : StateMachine
 
     
 
-    public bool fieldOfViewYellowCheck() {
-        Collider[] YellowCircleChecks = Physics.OverlapSphere(transform.position, yellowZoneRadius, targetMask);
+    public bool fieldOfViewYellowCheck(float yellowZone) {
+        Collider[] YellowCircleChecks = Physics.OverlapSphere(transform.position, yellowZone, targetMask);
         
 
         if (YellowCircleChecks.Length != 0)
@@ -77,8 +79,8 @@ public class EnemyAI : StateMachine
             return false;
     }
 
-    public bool fieldOfViewRedCheck() {
-        Collider[] RedCircleChecks = Physics.OverlapSphere(transform.position, redZoneRadius, targetMask);
+    public bool fieldOfViewRedCheck(float redZone) {
+        Collider[] RedCircleChecks = Physics.OverlapSphere(transform.position, redZone, targetMask);
 
         if (RedCircleChecks.Length != 0)
         {

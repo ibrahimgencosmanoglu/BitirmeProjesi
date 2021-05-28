@@ -1959,8 +1959,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   redZoneRadius: 5
-  redZoneIncSpeed: 1
-  yellowZoneRadius: 15
+  redZoneIncSpeed: 10
+  yellowZoneRadius: 30
   angle: 96
   canSeePlayer: 0
   detectionTime: 1
