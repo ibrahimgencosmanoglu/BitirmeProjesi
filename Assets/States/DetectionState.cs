@@ -33,20 +33,6 @@ public class DetectionState : IState
         this.detectionTime = detectionTime;
     }
 
-    //public DetectionState(bool _isAvailable, EnemyAI SM, Material enemyMaterial, Transform myTransform, Rigidbody rb, Transform target, float yellowZoneRadius, float redZoneRadius, float redZoneIncSpeed)
-    //{
-    //    //Needs
-    //    this.myTransform = myTransform;
-    //    this.isAvailable = _isAvailable;
-    //    this.SM = SM;
-    //    this.enemyMaterial = enemyMaterial;
-    //    this.rb = rb;
-    //    this.target = target;
-    //    this.yellowZoneRadius = yellowZoneRadius;
-    //    this.redZoneRadius = redZoneRadius;
-    //    this.redZoneIncSpeed = redZoneIncSpeed;
-    //}
-
     public bool isAvailable { get; set; }
 
     public void Enter()
@@ -55,7 +41,7 @@ public class DetectionState : IState
         {
             time = 0;
             agent.isStopped = true;
-            redZonedefault = this.redZoneRadius;
+            this.redZoneRadius = EnemyAI.redZoneDefault;
             enemyMaterial.color = Color.yellow;
             //throw new System.NotImplementedException();
         }

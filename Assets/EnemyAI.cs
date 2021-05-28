@@ -31,14 +31,15 @@ public class EnemyAI : StateMachine
     [SerializeField] LayerMask obstructionMask;
     [SerializeField] public GameObject playerRef;
     public static Vector3 targetPosition;
-    //public static float redZoneDefault = new float();
+    public static float redZoneDefault = new float();
     private void Awake()
     {
         //redZoneDefault = redZoneRadius;
         this.agent = GetComponent < NavMeshAgent>();
+        this.agent.speed = speed;
         playerRef = GameObject.FindGameObjectWithTag("Player");
         //target = PlayerManager.instance.player.transform;
-        idleState = new IdleState(isIdleState,this,enemyMesh.material,this.transform,this.playerRef,this.yellowZoneRadius,this.idleStartPoint,this.idleEndPoint,this.speed,this.agent,this.redZoneRadius);
+        idleState = new IdleState(isIdleState,this,enemyMesh.material,this.transform,this.playerRef,this.yellowZoneRadius,this.idleStartPoint,this.idleEndPoint,this.agent,this.redZoneRadius);
         chaseState = new ChaseState(isChaseState,this,enemyMesh.material,this.transform,this.rb,this.agent,this.playerRef,this.yellowZoneRadius);
         detectionState = new DetectionState(isDetectionState, this, enemyMesh.material, this.transform, this.playerRef, this.yellowZoneRadius, this.redZoneRadius, this.redZoneIncSpeed,this.agent,this.detectionTime);
         searchState = new SearchState(isSearchState, this, enemyMesh.material, this.transform, this.rb, this.agent, this.playerRef, this.redZoneRadius, this.yellowZoneRadius, this.redZoneIncSpeed);

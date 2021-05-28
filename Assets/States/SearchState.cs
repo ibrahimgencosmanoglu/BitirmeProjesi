@@ -36,6 +36,7 @@ public class SearchState : IState
     {
         if (isAvailable)
         {
+            this.redZoneRadius = EnemyAI.redZoneDefault;
             enemyMaterial.color = Color.yellow;
             agent.isStopped = false;
             //throw new System.NotImplementedException();
