@@ -12,6 +12,8 @@ public class ChaseState : IState
     Rigidbody rb;
     NavMeshAgent agent;
     float lookRadius;
+
+    //Constructor
     public ChaseState(bool _isAvailable, EnemyAI SM, Material enemyMaterial, Transform myTransform, Rigidbody rb,NavMeshAgent agent, GameObject player,float lookRadius)
     {
         //Needs
@@ -50,7 +52,7 @@ public class ChaseState : IState
 
     public void Tick()
     {
-        if (isAvailable) 
+        if (isAvailable) // kovalama halindedir. Bu durumda karakterin sarı alanı kırmızıya dönmüştür. kırmızı alan dışına çıktığında idle noktasına yapay zeka geri döner
         {
             float distance = Vector3.Distance(myTransform.position, player.transform.position);
 

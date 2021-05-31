@@ -1,40 +1,54 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using System.Collections;                                       //C# namespace
+using System.Collections.Generic;                               //C# namespace
+using UnityEngine;                                              //Unitynin bize sunduğu Vector3,GameObject,LayerMask,Transform vs. sınıflarının bulunduğu namespace
+using UnityEngine.AI;                                           //NavMesh ve NavMeshAgent için gerekli olan namespace
 
-public class EnemyAI : StateMachine
+//EnemyAI Scripti Kullanıcı arayüzü ile
+
+public class EnemyAI : StateMachine         
 {
+    // Durumların Tanımlandığı yer
     public DetectionState detectionState { get; private set; }
     public IdleState idleState { get; private set; }
     public ChaseState chaseState { get; private set; }
     public SearchState searchState { get; private set; }
     NavMeshAgent agent;
-    [SerializeField] public float redZoneRadius;
-    [SerializeField] float redZoneIncSpeed;
-    [SerializeField] public float yellowZoneRadius;
-    [Range(0,360)] public float angle;
-    [SerializeField] public bool canSeePlayer;
-    [SerializeField] float detectionTime;
-   // [SerializeField] Transform target;
-    [SerializeField] MeshRenderer enemyMesh = null;
-    [SerializeField] Rigidbody rb;
-    //[SerializeField] float lookRadius = 10f;
+
+    // Durumların seçileceği yerler
+
     [SerializeField] bool isIdleState = true;
     [SerializeField] bool isChaseState = true;
     [SerializeField] bool isDetectionState = true;
     [SerializeField] bool isSearchState = true;
+
+    // Unity Componentlerinin kullanıcı arayüzüne ekleneceği yerler
+
+    [SerializeField] MeshRenderer enemyMesh = null;
+    [SerializeField] Rigidbody rb;
     [SerializeField] Vector3 idleStartPoint;
     [SerializeField] Vector3 idleEndPoint;
-    [SerializeField] float speed;
     [SerializeField] LayerMask targetMask;
     [SerializeField] LayerMask obstructionMask;
     [SerializeField] public GameObject playerRef;
+
+    // Unity kullanıcı ara yüzünden eklenecek olan nümerik alanlar 
+
+    [SerializeField] public float redZoneRadius;
+    [SerializeField] float redZoneIncSpeed;
+    [SerializeField] public float yellowZoneRadius;
+    [Range(0,360)]   public float angle;
+    [SerializeField] float detectionTime;
+    [SerializeField] float speed;
+
+
+    
+
     public static Vector3 targetPosition;
     public static float redZoneDefault = new float();
-    private void Awake()
+
+
+    private void Awake()                                // Start metodundan önce çağrılır bütün durumlar bu metodun içerisinde başlatılır
     {
-        //redZoneDefault = redZoneRadius;
         this.agent = GetComponent < NavMeshAgent>();
         this.agent.speed = speed;
         playerRef = GameObject.FindGameObjectWithTag("Player");
@@ -46,29 +60,31 @@ public class EnemyAI : StateMachine
         
     }
 
-    void Start()
+    void Start()                                    
     {
-        //StartCoroutine(fieldOfViewRoutine());
-        ChangeState(idleState);
+        ChangeState(idleState);                         // ilk durum başlangıcı
     }
 
     
 
-    public bool fieldOfViewYellowCheck(float yellowZone) {
-        Collider[] YellowCircleChecks = Physics.OverlapSphere(transform.position, yellowZone, targetMask);
+    public bool fieldOfViewYellowCheck(float yellowZone) {          // Sarı Alan Görüş Açısını belirlediğimiz metod
+        Collider[] YellowCircleChecks = Physics.OverlapSphere(transform.position, yellowZone, targetMask);      // Yapay Zekanın etrafında yarı çapı yellowZone değişkeni olan görünmez bir küre oluşturur
+                                                                                                                // ve bu küre içerisinde olan ve targetMask ile aynı katmanda olan objeleri dönderir.
         
 
-        if (YellowCircleChecks.Length != 0)
+        if (YellowCircleChecks.Length != 0)                         // yukarıda oluşturulan küreden bir değer döndüyse
         {
-            Transform target = YellowCircleChecks[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
+            Transform target = YellowCircleChecks[0].transform;     // kürenin içerisine giren nesnenin pozisyonu belirlenir.
+            Vector3 directionToTarget = (target.position - transform.position).normalized; //yapay zeka ve oyuncu arasındaki mesafe alınıp normalize (0-1 arasında bir değere normalleştirilir.) edilir.
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)                            // yapay zekanın z ekseni ve düşman arasındaki açı hesaplanır
+                                                                                                            // tanımlanan görüş açısının yarısından ufaksa işlem yapılır.
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
-                    return true;
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) // Unity Physics sınıfının metodu olan Raycast kullanılarak 
+                    return true;                                                                                // karakterin bulunduğu konumdan ışın yollar yolladığı ışın
+                                                                                                                // obstructionMask katmanıyla aynı katmanda olan bir objeye çarparsa orada sonlanır
                 else
                     return false;
 

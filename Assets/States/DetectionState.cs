@@ -18,6 +18,8 @@ public class DetectionState : IState
     Material enemyMaterial;
     Rigidbody rb;
     NavMeshAgent agent;
+
+    //Construction
     public DetectionState(bool _isAvailable, EnemyAI SM, Material enemyMaterial, Transform myTransform, GameObject player, float yellowZoneRadius, float redZoneRadius, float redZoneIncSpeed, NavMeshAgent agent,float detectionTime)
     {
         //Needs
@@ -35,7 +37,7 @@ public class DetectionState : IState
 
     public bool isAvailable { get; set; }
 
-    public void Enter()
+    public void Enter()     // duruma giriş yaptığında yapay zekanın davranışı
     {
         if (isAvailable) 
         {
@@ -63,7 +65,7 @@ public class DetectionState : IState
         {
             distance = Vector3.Distance(myTransform.position, player.transform.position);
 
-            if (SM.fieldOfViewYellowCheck(this.yellowZoneRadius))
+            if (SM.fieldOfViewYellowCheck(this.yellowZoneRadius))   // 2 sn bekler ve sonrasında karakterin sarı alanda son görüldüğü pozisyona ilerler
             {
                 time += Time.deltaTime;
                 if (time >= detectionTime) 
@@ -75,11 +77,11 @@ public class DetectionState : IState
 
             if (SM.fieldOfViewRedCheck(this.redZoneRadius))
             {
-                SM.ChangeState(SM.chaseState);
+                SM.ChangeState(SM.chaseState);          // kırmızı alana girerse karakteri kovalamaya başlar
             }
             else if (!SM.fieldOfViewYellowCheck(this.yellowZoneRadius))
             {
-                SM.ChangeState(SM.idleState);
+                SM.ChangeState(SM.idleState);           // karakteri bulamazsa idle durumuna geri döner
             }
         }
 

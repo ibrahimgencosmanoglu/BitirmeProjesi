@@ -17,26 +17,28 @@ public class IdleState : IState
     Material enemyMaterial;
     Color enemyColor = Color.black;
     float redZoneRadius;
-    
+    public bool isAvailable { get; set; }
+
+    // Constructor
+
     public IdleState(bool _isAvailable, EnemyAI SM, Material enemyMaterial, Transform myTransform, GameObject player, float yellowZoneRadius, Vector3 startPoint, Vector3 endPoint, NavMeshAgent agent,float redZoneRadius) {
         //Needs
-        this.yellowZoneRadius = yellowZoneRadius;
-        this.player = player;
-        this.myTransform = myTransform;
-        this.isAvailable = _isAvailable;
-        this.SM = SM;
-        this.enemyMaterial = enemyMaterial;
-        this.startPoint = startPoint;
-        this.endPoint= endPoint;
-        this.agent = agent;
-        this.redZoneRadius = redZoneRadius;
+        this.yellowZoneRadius = yellowZoneRadius;   // Sarı alan yarı çapı
+        this.player = player;                       // player objesi
+        this.myTransform = myTransform;             // kendi pozisyonu
+        this.isAvailable = _isAvailable;            // state var mı yok mu
+        this.SM = SM;                               // YapayZeka objesi
+        this.enemyMaterial = enemyMaterial;         // materyali
+        this.startPoint = startPoint;               // volta atarken ki başlangıç noktası
+        this.endPoint= endPoint;                    // volta atarken ki varış noktası
+        this.agent = agent;                         // navmesh agent
+        this.redZoneRadius = redZoneRadius;         // kırmızı alan yarı çapı
 
     }
-    public bool isAvailable { get; set; }
 
     public void Enter()
     {
-        initialMove = false;
+        initialMove = false;                    
         agent.isStopped = true;
         enemyColor = enemyMaterial.color;
         enemyMaterial.color = Color.black;
@@ -51,7 +53,7 @@ public class IdleState : IState
     public void FixTick()
     {
         //this method for physics to run it in fixed update
-        //do snothing
+        //do nothing
     }
 
     public void Tick()
@@ -70,11 +72,11 @@ public class IdleState : IState
         if (SM.fieldOfViewRedCheck(this.redZoneRadius))
         {
             EnemyAI.targetPosition = player.transform.position;
-            this.SM.ChangeState(SM.chaseState);
+            this.SM.ChangeState(SM.chaseState);                         // kırmızı alana girerse kovalama durumuna geçer
         }
         else if (SM.fieldOfViewYellowCheck(this.yellowZoneRadius)) {
             EnemyAI.targetPosition = player.transform.position;
-            this.SM.ChangeState(SM.detectionState);
+            this.SM.ChangeState(SM.detectionState);                     // sarı alana girerse tespit etme alanına girer
         }
     }
 
@@ -86,7 +88,7 @@ public class IdleState : IState
         startPoint = temp;
     }
 
-    public Vector3 findClosestDestination() 
+    public Vector3 findClosestDestination()             // yapay zekanın bulunduğu konumda başlangıç ve varış noktalarına olan en yakın mesafeyi bulduğu fonksiyon 
     {
         if (Vector3.Distance(myTransform.position, startPoint) > Vector3.Distance(myTransform.position, endPoint))
         {

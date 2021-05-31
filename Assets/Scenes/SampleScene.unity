@@ -1958,10 +1958,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74c64ccc9ef701749b0a01ce56d0d719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  redZoneRadius: 5
-  redZoneIncSpeed: 10
-  yellowZoneRadius: 30
-  angle: 96
+  redZoneRadius: 5.02
+  redZoneIncSpeed: 9.82
+  yellowZoneRadius: 26.02
+  angle: 99.9
   canSeePlayer: 0
   detectionTime: 1
   enemyMesh: {fileID: 2032540213}

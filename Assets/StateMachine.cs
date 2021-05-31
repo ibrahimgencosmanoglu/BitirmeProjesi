@@ -2,55 +2,58 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Bu sınıf bütün durum değişikliklerinin kontrol edildiği singleton sınıfıdır.
+
 public class StateMachine : MonoBehaviour
 {
-    public IState currentState { get; set; }
-    public IState previousState;
+    public IState currentState { get; set; }            // Mevcut durumun tutulduğu IState değişkeni
+    public IState previousState;                        // Bir önceki durumun tutulduğu IState değişkeni
 
-    private bool _inTransition = false;
+    private bool _inTransition = false;                 // Durum geçişini kontrol eden değişken
 
-    public void ChangeState(IState newState) {
+    public void ChangeState(IState newState) {          // Durum değiştirme metodu
         if (currentState == newState || _inTransition)
         {
-            Debug.Log("Same State");
             return;
         }
         ChangeStateRoutine(newState);
     }
-    public void RevertState() {
-        if (previousState != null) {
-            currentState = previousState;
-        }
-    }
-    public void ChangeStateRoutine(IState newState) {
-        _inTransition = true;
-        if (currentState != null) 
+
+    //public void RevertState() {                         // Bir önceki duruma geri dönme Metodu
+    //    if (previousState != null) {
+    //        currentState = previousState;
+    //    }
+    //}
+
+    public void ChangeStateRoutine(IState newState) {   // Durum değiştirme Metodu
+        _inTransition = true;                           // Durum değişme aşamasında
+        if (currentState != null)
         {
-            currentState.Exit();
+            currentState.Exit();                        // IState Exit Metodunun çalıştığı yer
         }
         if (previousState != null) 
         {
-            previousState = currentState;
+            previousState = currentState;               // Önceki duruma şimdiki durum atandı
         }
         Debug.Log("New State");
-        currentState = newState;
+        currentState = newState;                        // Yeni durum şimdiki duruma geldi
 
         if (currentState != null) 
         {
-            currentState.Enter();
+            currentState.Enter();                       // Yeni duruma giriş yapıldı
         }
-        _inTransition = false;
+        _inTransition = false;                          // Durum değişimi süreci sona erdi
     }
     // Update is called once per frame
-    public void Update()
+    public void Update()                                // Unitynin bize sunduğu gameloop patterninin çalıştığı saniyede belli bir sayıda (FPS) çalışan döngü
     {
-        if (currentState != null && !_inTransition) 
+        if (currentState != null && !_inTransition)     // Durum null değilse ve geçiş yoksa IState'in Tick metodununu çağırır
         {
             currentState.Tick();
         }   
     }
 
-    //public void FixedUpdate()
+    //public void FixedUpdate()                     // FixedUpdate Fizik objelerinin çalışacağı metod
     //{
     //    if (currentState != null && !_inTransition) 
     //    {

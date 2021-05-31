@@ -15,6 +15,8 @@ public class SearchState : IState
     float redZoneRadius;
     float yellowZoneRadius;
     float redZoneIncSpeed;
+
+    //Constructor
     public SearchState(bool _isAvailable, EnemyAI SM, Material enemyMaterial, Transform myTransform, Rigidbody rb, NavMeshAgent agent, GameObject player, float redZoneRadius, float yellowZoneRadius, float redZoneIncSpeed)
     {
         //Needs
@@ -54,8 +56,8 @@ public class SearchState : IState
         //throw new System.NotImplementedException();
     }
 
-    public void Tick()
-    {
+    public void Tick()          //yapay zeka düşmanın son görüldüğü pozisyona doğru hareket etmektedir.
+    {                           //Bu arada kırmızı alan yavaş yavaş sarı alan kadar genişlemektedir. oyuncu alandan çıkarsa idle durumuna geri dönecektir.
         if (isAvailable)
         {
             float distance = Vector3.Distance(myTransform.position, player.transform.position);
